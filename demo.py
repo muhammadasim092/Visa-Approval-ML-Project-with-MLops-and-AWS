@@ -1,11 +1,4 @@
-from visa_approval_prediction.logger import logging
-from visa_approval_prediction.exception import visaException
-import sys
+from visa_approval_prediction.pipline.training_pipeline import TrainPipeline
 
-logging.info("custom log")
-
-try:
-    a = 2/0
-
-except Exception as e:
-    raise visaException(e, sys)
+obj = TrainPipeline()
+obj.run_pipeline()
