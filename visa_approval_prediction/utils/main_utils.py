@@ -78,11 +78,11 @@ def save_object(file_path:str, obj: object)->None:
         raise visaException (e, sys) from e
     
 # DROP COLUMS
-def drop_colums(df:DataFrame, col = list)->DataFrame:
+def drop_columns(df:DataFrame, cols = list)->DataFrame:
     logging.info("Entered in drop colums method of utils")
     
     try:
-        df = df.drop(columns=col, axis=1)
+        df = df.drop(columns=cols, axis=1)
         logging.info("Exited the drop colums method of utils")
         return df
 
