@@ -78,7 +78,7 @@ MODEL_PUSHER_S3_KEY = "model-registry"
 
 
 APP_HOST = "127.0.0.1"
-# APP_HOST = "0.0.0.0" this cannot be used and check
+# APP_HOST = "0.0.0.0" this cannot be used 
 APP_PORT = 8080 
 
 
