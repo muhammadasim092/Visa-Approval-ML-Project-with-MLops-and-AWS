@@ -45,6 +45,7 @@ AWS-CICD-Deployment-with-Github-Actions
 1. AmazonEC2ContainerRegistryFullAccess
 
 2. AmazonEC2FullAccess
+AmazonS3FullAccess
 
 3. Create ECR repo to store/save docker image
 - Save the URI: 315865595366.dkr.ecr.us-east-1.amazonaws.com/visarepo
@@ -72,3 +73,6 @@ AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
 AWS_DEFAULT_REGION
 ECR_REPO
+
+
+visarepo
