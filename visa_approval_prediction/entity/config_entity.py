@@ -50,20 +50,18 @@ class ModelTrainerConfig:
 @dataclass
 class ModelEvaluationConfig:
     changed_threshold_score: float = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
-    bucket_name: str = MODEL_BUCKET_NAME
-    s3_model_key_path: str = MODEL_FILE_NAME
-
+    model_registry_dir: str = MODEL_REGISTRY_DIR
+    model_file_name: str = MODEL_FILE_NAME
+    best_model_path: str = os.path.join(MODEL_REGISTRY_DIR, MODEL_FILE_NAME)
 
 
 @dataclass
 class ModelPusherConfig:
-    bucket_name: str = MODEL_BUCKET_NAME
-    s3_model_key_path: str = MODEL_FILE_NAME
-
-
+    model_registry_dir: str = MODEL_REGISTRY_DIR
+    model_file_name: str = MODEL_FILE_NAME
+    best_model_path: str = os.path.join(MODEL_REGISTRY_DIR, MODEL_FILE_NAME)
 
 
 @dataclass
 class visaPredictorConfig:
-    model_file_path: str = MODEL_FILE_NAME
-    model_bucket_name: str = MODEL_BUCKET_NAME
+    model_file_path: str = os.path.join(MODEL_REGISTRY_DIR, MODEL_FILE_NAME)

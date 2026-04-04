@@ -40,12 +40,11 @@ class ModelEvaluation:
         On Failure  :   Write an exception log and then raise an exception
         """
         try:
-            bucket_name = self.model_eval_config.bucket_name
-            model_path=self.model_eval_config.s3_model_key_path
-            visa_estimator = visaEstimator(bucket_name=bucket_name,
-                                               model_path=model_path)
+            visa_estimator = visaEstimator(
+                model_registry_dir=self.model_eval_config.model_registry_dir,
+                model_file_name=self.model_eval_config.model_file_name)
 
-            if visa_estimator.is_model_present(model_path=model_path):
+            if visa_estimator.is_model_present():
                 return visa_estimator
             return None
         except Exception as e:
@@ -100,11 +99,10 @@ class ModelEvaluation:
         """  
         try:
             evaluate_model_response = self.evaluate_model()
-            s3_model_path = self.model_eval_config.s3_model_key_path
 
             model_evaluation_artifact = ModelEvaluationArtifact(
                 is_model_accepted=evaluate_model_response.is_model_accepted,
-                s3_model_path=s3_model_path,
+                best_model_path=self.model_eval_config.best_model_path,
                 trained_model_path=self.model_trainer_artifact.trained_model_file_path,
                 changed_accuracy=evaluate_model_response.difference)
 

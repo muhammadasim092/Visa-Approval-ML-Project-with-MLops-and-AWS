@@ -5,7 +5,7 @@ DATABASE_NAME = "visaapprovel"
 
 COLLECTION_NAME = "visa_data"
 
-MONGODB_URL_KEY = "MONGODB_URL"
+LOCAL_DATA_FILE_PATH = os.path.join("notebook", "Visa_Predection_Dataset.csv")
 
 PIPELINE_NAME: str = "visa_approval"
 ARTIFACT_DIR: str = "artifact"
@@ -25,9 +25,7 @@ SCHEMA_FILE_PATH = os.path.join("config", "schema.yaml")
 
 
 
-AWS_ACCESS_KEY_ID_ENV_KEY = "AWS_ACCESS_KEY_ID"
-AWS_SECRET_ACCESS_KEY_ENV_KEY = "AWS_SECRET_ACCESS_KEY"
-REGION_NAME = "us-east-1"
+MODEL_REGISTRY_DIR = os.path.join("model_registry")
 
 
 
@@ -73,8 +71,7 @@ MODEL_TRAINER_MODEL_CONFIG_FILE_PATH: str = os.path.join("config", "model.yaml")
 MODEL EVALUATION related constant 
 """
 MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE: float = 0.07
-MODEL_BUCKET_NAME = "visa-prediction-project"
-MODEL_PUSHER_S3_KEY = "model-registry"
+MODEL_REGISTRY_MODEL_PATH = os.path.join(MODEL_REGISTRY_DIR, MODEL_FILE_NAME)
 
 
 APP_HOST = "0.0.0.0"

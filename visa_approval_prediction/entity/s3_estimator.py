@@ -1,62 +1,45 @@
-from visa_approval_prediction.cloud_storage.aws_storage import SimpleStorageService
+import os
+import sys
+import shutil
+
 from visa_approval_prediction.exception import visaException
 from visa_approval_prediction.entity.estimator import visaModel
-import sys
+from visa_approval_prediction.utils.main_utils import load_objects
 from pandas import DataFrame
+
 
 class visaEstimator:
     """
-    This class is used to save and retrieve us_visas model in s3 bucket and to do prediction
+    This class is used to save and retrieve visa model from a local model registry directory
     """
 
-    def __init__(self,bucket_name,model_path,):
-        """
-        :param bucket_name: Name of your model bucket
-        :param model_path: Location of your model in bucket
-        """
-        self.bucket_name = bucket_name
-        self.s3 = SimpleStorageService()
-        self.model_path = model_path
-        self.loaded_model:visaModel=None
+    def __init__(self, model_registry_dir: str, model_file_name: str):
+        self.model_registry_dir = model_registry_dir
+        self.model_file_name = model_file_name
+        self.model_path = os.path.join(model_registry_dir, model_file_name)
+        self.loaded_model: visaModel = None
 
-
-    def is_model_present(self,model_path):
+    def is_model_present(self, model_path: str = None) -> bool:
         try:
-            return self.s3.s3_key_path_available(bucket_name=self.bucket_name, s3_key=model_path)
-        except visaException as e:
+            path = model_path if model_path else self.model_path
+            return os.path.exists(path)
+        except Exception as e:
             print(e)
             return False
 
-    def load_model(self,)->visaModel:
-        """
-        Load the model from the model_path
-        :return:
-        """
+    def load_model(self) -> visaModel:
+        return load_objects(file_path=self.model_path)
 
-        return self.s3.load_model(self.model_path,bucket_name=self.bucket_name)
-
-    def save_model(self,from_file,remove:bool=False)->None:
-        """
-        Save the model to the model_path
-        :param from_file: Your local system model path
-        :param remove: By default it is false that mean you will have your model locally available in your system folder
-        :return:
-        """
+    def save_model(self, from_file: str, remove: bool = False) -> None:
         try:
-            self.s3.upload_file(from_file,
-                                to_filename=self.model_path,
-                                bucket_name=self.bucket_name,
-                                remove=remove
-                                )
+            os.makedirs(self.model_registry_dir, exist_ok=True)
+            shutil.copy2(from_file, self.model_path)
+            if remove and os.path.exists(from_file):
+                os.remove(from_file)
         except Exception as e:
             raise visaException(e, sys)
 
-
-    def predict(self,dataframe:DataFrame):
-        """
-        :param dataframe:
-        :return:
-        """
+    def predict(self, dataframe: DataFrame):
         try:
             if self.loaded_model is None:
                 self.loaded_model = self.load_model()

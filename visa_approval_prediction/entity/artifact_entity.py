@@ -33,16 +33,13 @@ class ModelTrainerArtifact:
 class ModelEvaluationArtifact:
     is_model_accepted:bool
     changed_accuracy:float
-    s3_model_path:str 
+    best_model_path:str
     trained_model_path:str
-
 
 
 @dataclass
 class ModelPusherArtifact:
-    bucket_name:str
-    s3_model_path:str
+    model_registry_dir:str
+    best_model_path:str
 
-
-    
     

@@ -9,15 +9,12 @@ scikit-learn
 imblearn
 xgboost
 catboost
-pymongo
 from_root
 evidently==0.2.8
 dill
 PyYAML
 neuro_mf
-boto3
-mypy-boto3-s3
-botocore
+shap
 fastapi
 uvicorn
 jinja2

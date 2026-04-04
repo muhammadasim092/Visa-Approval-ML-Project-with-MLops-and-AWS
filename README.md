@@ -1,78 +1,123 @@
-# Visa-Approval-ML-Project-with-MLops-and-aws
-It is a end to end ML project of a real world problem of visa approval application with full MLops  pipelines and aws solution
+# Visa Approval Prediction - ML Project
 
-<!-- tools  -->
+An end-to-end machine learning project that predicts US visa approval outcomes. Features a full ML pipeline (data ingestion, validation, transformation, model training, evaluation, and model registry) with a FastAPI web interface and SHAP-based explainability.
 
-anaconda
-vs code
-git
-aws
+## Features
 
-<!-- work flow  -->
+- **ML Pipeline**: Automated training pipeline with data validation, transformation, and model selection
+- **Local-First**: Runs entirely locally — no cloud dependencies (MongoDB, S3) required
+- **SHAP Explainability**: Model predictions include SHAP-based insights showing which factors influenced the decision
+- **Web Interface**: Clean FastAPI frontend for submitting visa applications and viewing predictions
+- **Modal Training**: Optional cloud training via [Modal](https://modal.com) for faster iteration
 
-constants
-entity
-components
-pipeline
-main file
+## Tech Stack
 
-<!-- aws deployment   -->
+- **ML**: scikit-learn, XGBoost, CatBoost, SHAP
+- **Backend**: FastAPI, Uvicorn
+- **Data**: pandas, numpy
+- **Frontend**: Jinja2 templates, HTML/CSS/JS
 
-AWS-CICD-Deployment-with-Github-Actions
-1. Login to AWS console.
-2. Create IAM user for deployment
-#with specific access
+## Project Structure
 
-1. EC2 access : It is virtual machine
+```
+├── visa_approval_prediction/
+│   ├── components/          # Pipeline stages (ingestion, validation, training, etc.)
+│   ├── entity/              # Config, artifacts, estimator, SHAP explainer
+│   ├── pipline/             # Training and prediction pipelines
+│   ├── data_access/         # Local CSV data access
+│   ├── constants/           # Project constants
+│   ├── utils/               # Utility functions
+│   ├── logger/              # Logging setup
+│   └── exception/           # Custom exceptions
+├── config/                  # Model and schema configs
+├── notebook/                # Dataset (Visa_Predection_Dataset.csv)
+├── templates/               # Frontend HTML
+├── static/                  # Static assets
+├── model_registry/          # Trained model storage (gitignored)
+├── app.py                   # FastAPI application
+├── demo.py                  # Training script
+└── train_modal.py           # Modal cloud training script
+```
 
-2. ECR: Elastic Container registry to save your docker image in aws
+## Setup
 
+### Prerequisites
+- Python 3.10+
+- pip
 
-#Description: About the deployment
+### Installation
 
-1. Build docker image of the source code
+```bash
+git clone https://github.com/muhammadasim092/Visa-Approval-ML-Project-with-MLops-and-AWS.git
+cd Visa-Approval-ML-Project-with-MLops-and-AWS
+pip install -r requirements.txt
+```
 
-2. Push your docker image to ECR
+### Train the Model
 
-3. Launch Your EC2 
+**Locally:**
+```bash
+python demo.py
+```
 
-4. Pull Your image from ECR in EC2
+**On Modal (cloud):**
+```bash
+pip install modal
+modal setup
+modal run train_modal.py
+```
 
-5. Lauch your docker image in EC2
+### Run the App
 
-#Policy:
+```bash
+python app.py
+```
 
-1. AmazonEC2ContainerRegistryFullAccess
+Open **http://localhost:8080** in your browser.
 
-2. AmazonEC2FullAccess
-AmazonS3FullAccess
+## API Endpoints
 
-3. Create ECR repo to store/save docker image
-- Save the URI: 315865595366.dkr.ecr.us-east-1.amazonaws.com/visarepo
-4. Create EC2 machine (Ubuntu)
-5. Open EC2 and Install docker in EC2 Machine:
-#optinal
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Web form for visa prediction |
+| POST | `/` | Form-based prediction (HTML response) |
+| POST | `/predict` | JSON prediction with SHAP insights |
+| GET | `/train` | Trigger model training |
 
-sudo apt-get update -y
+### Example `/predict` Request
 
-sudo apt-get upgrade
+```json
+{
+  "continent": "Asia",
+  "education_of_employee": "Master's",
+  "has_job_experience": "Y",
+  "requires_job_training": "N",
+  "no_of_employees": 5000,
+  "region_of_employment": "Northeast",
+  "prevailing_wage": 80000,
+  "unit_of_wage": "Year",
+  "full_time_position": "Y",
+  "company_age": 20
+}
+```
 
-#required
+### Example Response
 
-curl -fsSL https://get.docker.com -o get-docker.sh
+```json
+{
+  "result": "approved",
+  "confidence": 85,
+  "insights": {
+    "strengths": [
+      "Master's education moderately favors approval",
+      "Having job experience slightly favors approval"
+    ],
+    "weaknesses": [],
+    "suggestions": []
+  }
+}
+```
 
-sudo sh get-docker.sh
+## Dataset
 
-sudo usermod -aG docker ubuntu
-
-newgrp docker
-6. Configure EC2 as self-hosted runner:
-setting>actions>runner>new self hosted runner> choose os> then run command one by one
-7. Setup github secrets:
-AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY
-AWS_DEFAULT_REGION
-ECR_REPO
-
-
-visarepo
+The dataset contains **25,480 records** of US visa applications with features including education level, job experience, wage, company size, and more. Source: `notebook/Visa_Predection_Dataset.csv`

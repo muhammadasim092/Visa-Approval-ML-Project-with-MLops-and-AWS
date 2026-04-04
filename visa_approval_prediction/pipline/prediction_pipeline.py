@@ -104,13 +104,14 @@ class visaClassifier:
         """
         try:
             logging.info("Entered predict method of visaClassifier class")
+            model_file_path = self.prediction_pipeline_config.model_file_path
             model = visaEstimator(
-                bucket_name=self.prediction_pipeline_config.model_bucket_name,
-                model_path=self.prediction_pipeline_config.model_file_path,
+                model_registry_dir=os.path.dirname(model_file_path),
+                model_file_name=os.path.basename(model_file_path),
             )
-            result =  model.predict(dataframe)
-            
+            result = model.predict(dataframe)
+
             return result
-        
+
         except Exception as e:
             raise visaException(e, sys)
